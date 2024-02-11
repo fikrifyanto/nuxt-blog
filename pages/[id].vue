@@ -1,6 +1,6 @@
 <template>
     <header class="bg-[#7d27ffe0] text-center text-white py-20 px-6 lg:px-0">
-        <h1 class="text-4xl font-raleway font-extrabold">{{ post.title }}</h1>
+        <h1 class="text-4xl max-w-4xl mx-auto font-raleway font-extrabold">{{ post.title }}</h1>
         <span class="font-ibm-plex-sanstext-lg my-4 block">{{ user.name }}</span>
     </header>
     <main class="py-10 md:py-20">
