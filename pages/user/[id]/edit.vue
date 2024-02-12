@@ -42,7 +42,7 @@
 const route = useRoute()
 const router = useRouter()
 
-const { data: user }: any = useFetch('https://gorest.co.in/public/v2/users/' + route.params.id)
+const { data: user }: any = await useFetch('https://gorest.co.in/public/v2/users/' + route.params.id)
 
 const name = ref(user.value?.name)
 const email = ref(user.value?.email)
