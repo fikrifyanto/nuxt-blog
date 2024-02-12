@@ -16,7 +16,9 @@
                         </h2>
                     </header>
                     <span class="font-ibm-plex-sans text-slate-800 text-lg my-4 block">{{ post.body }}</span>
-                    <span class="font-raleway text-slate-700 font-medium text-lg">{{ post.user.name }}</span>
+                    <span v-if="post.user" class="font-raleway text-slate-700 font-medium text-lg">
+                        {{ post.user.name }}
+                    </span>
                 </article>
             </template>
         </div>
@@ -24,9 +26,18 @@
 </template>
 
 <script setup lang="ts">
-useHead({
-    title: 'The Personal Blog',
-})
+const { data: posts }: any = await useFetch('https://gorest.co.in/public/v2/posts');
+
+posts.value = await Promise.all(posts.value.map(async (post: any) => {
+    post.body = excerpt(post.body);
+    try {
+        const { data: user } = await useFetch(`https://gorest.co.in/public/v2/users/${post.user_id}`);
+        post.user = user.value;
+    } catch (error) {
+        post.user = {}
+    }
+    return post;
+}));
 
 function excerpt(text: string): string | null | undefined {
     const sentences = text.match(/[^.!?]+[.!?]+/g);
@@ -34,12 +45,7 @@ function excerpt(text: string): string | null | undefined {
     return threeSentences?.join('');
 }
 
-const postsResponse: any = await $fetch('https://gorest.co.in/public/v2/posts');
-
-const posts = await Promise.all(postsResponse.map(async (post: any) => {
-    post.body = excerpt(post.body);
-    const userResponse = await $fetch(`https://gorest.co.in/public/v2/users/${post.user_id}`);
-    post.user = userResponse;
-    return post;
-}));
+useHead({
+    title: 'The Personal Blog',
+})
 </script>

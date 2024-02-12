@@ -1,7 +1,7 @@
 <template>
     <header class="bg-[#7d27ffe0] text-center text-white py-20 px-6 lg:px-0">
         <h1 class="text-4xl max-w-4xl mx-auto font-raleway font-extrabold">{{ post.title }}</h1>
-        <span class="font-ibm-plex-sanstext-lg my-4 block">{{ user.name }}</span>
+        <span v-if="user" class="font-ibm-plex-sanstext-lg my-4 block">{{ user.name }}</span>
     </header>
     <main class="py-10 md:py-20">
         <article class="max-w-xl mx-auto px-6 lg:px-0">
@@ -30,16 +30,14 @@
 <script setup lang="ts">
 const route = useRoute()
 
-const postResponse: any = await useFetch('https://gorest.co.in/public/v2/posts/' + route.params.id)
-const post = postResponse.data.value;
+const { data: post, error: postError }: any = await useFetch('https://gorest.co.in/public/v2/posts/' + route.params.id)
 
-const userResponse: any = await useFetch(`https://gorest.co.in/public/v2/users/${post.user_id}`);
-const user = userResponse.data.value;
+const { data: user, error: userError }: any = await useFetch(`https://gorest.co.in/public/v2/users/${post.value.user_id}`);
+if (userError.value) user.value = user
 
-const commentsResponse: any = await useFetch(`https://gorest.co.in/public/v2/posts/${post.id}/comments`);
-const comments = commentsResponse.data.value;
+const { data: comments }: any = await useFetch(`https://gorest.co.in/public/v2/posts/${post.value.id}/comments`);
 
 useHead({
-    title: post.title,
+    title: post.value.title,
 })
 </script>
