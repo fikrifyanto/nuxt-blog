@@ -1,5 +1,5 @@
 <template>
-  <form @submit="addUser" class="max-w-lg mx-auto min-h-screen py-20">
+  <form @submit="addUser" class="max-w-lg mx-auto min-h-screen py-6 px-2">
     <div class="p-4 pt-0">
       <label for="name">Name</label>
       <input

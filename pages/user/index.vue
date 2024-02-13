@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-6xl mx-auto min-h-screen py-20">
+  <div class="max-w-6xl px-6 mx-auto min-h-screen py-6 lg:py-20">
     <!-- Toolbar -->
     <div class="flex justify-between items-center mb-8">
       <NuxtLink
@@ -24,93 +24,98 @@
     </div>
 
     <!-- Table -->
-    <table class="table-fixed w-full border-collapse border border-slate-200 rounded-lg">
-      <!-- Header -->
-      <thead class="bg-slate-50 border-b">
-        <tr>
-          <th class="font-semibold font-raleway p-5">Name</th>
-          <th class="font-semibold font-raleway p-5">Email</th>
-          <th class="font-semibold font-raleway p-5">Gender</th>
-          <th class="font-semibold font-raleway p-5">Status</th>
-          <th class="font-semibold font-raleway p-5">Action</th>
-        </tr>
-        <tr>
-          <th class="p-4 pt-0">
-            <input
-              placeholder="Search Name.."
-              v-model="users.search.name"
-              class="outline-[#7d27ffe0] rounded-md py-2 px-3 border border-gray-300 font-medium font-ibm-plex-sans"
-              type="text" />
-          </th>
-          <th class="p-4 pt-0">
-            <input
-              placeholder="Search Email.."
-              v-model="users.search.email"
-              class="outline-[#7d27ffe0] rounded-md py-2 px-3 border border-gray-300 font-medium font-ibm-plex-sans"
-              type="text" />
-          </th>
-          <th class="p-4 pt-0">
-            <select
-              v-model="users.search.gender"
-              class="outline-[#7d27ffe0] rounded-md py-2 px-3 border border-gray-300 font-medium font-ibm-plex-sans"
-              placeholder="Lokasi">
-              <option value="" selected>All Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
-          </th>
-          <th class="p-4 pt-0">
-            <select
-              v-model="users.search.status"
-              class="outline-[#7d27ffe0] rounded-md py-2 px-3 border border-gray-300 font-medium font-ibm-plex-sans"
-              placeholder="Lokasi">
-              <option value="" selected>All Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </select>
-          </th>
-          <th></th>
-        </tr>
-      </thead>
+    <div class="overflow-x-scroll border border-slate-200">
+      <table class="lg:table-fixed w-full border-collapse rounded-lg">
+        <!-- Header -->
+        <thead class="bg-slate-50 border-b">
+          <tr>
+            <th class="font-semibold font-raleway p-5">Name</th>
+            <th class="font-semibold font-raleway p-5">Email</th>
+            <th class="font-semibold font-raleway p-5">Gender</th>
+            <th class="font-semibold font-raleway p-5">Status</th>
+            <th class="font-semibold font-raleway p-5">Action</th>
+          </tr>
+          <tr>
+            <th class="p-4 pt-0">
+              <input
+                placeholder="Search Name.."
+                v-model="users.search.name"
+                class="outline-[#7d27ffe0] rounded-md py-2 px-3 border border-gray-300 font-medium font-ibm-plex-sans"
+                type="text" />
+            </th>
+            <th class="p-4 pt-0">
+              <input
+                placeholder="Search Email.."
+                v-model="users.search.email"
+                class="outline-[#7d27ffe0] rounded-md py-2 px-3 border border-gray-300 font-medium font-ibm-plex-sans"
+                type="text" />
+            </th>
+            <th class="p-4 pt-0">
+              <select
+                v-model="users.search.gender"
+                class="outline-[#7d27ffe0] rounded-md py-2 px-3 border border-gray-300 font-medium font-ibm-plex-sans"
+                placeholder="Lokasi">
+                <option value="" selected>All Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </th>
+            <th class="p-4 pt-0">
+              <select
+                v-model="users.search.status"
+                class="outline-[#7d27ffe0] rounded-md py-2 px-3 border border-gray-300 font-medium font-ibm-plex-sans"
+                placeholder="Lokasi">
+                <option value="" selected>All Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </th>
+            <th></th>
+          </tr>
+        </thead>
 
-      <!-- Body -->
-      <tbody>
-        <tr v-if="!users.loading" class="hover:bg-slate-50" v-for="user in users.data">
-          <td class="font-ibm-plex-sans text-slate-900 p-5">
-            {{ user.name }}
-          </td>
-          <td class="font-ibm-plex-sans text-slate-900 p-5">
-            {{ user.email }}
-          </td>
-          <td class="font-ibm-plex-sans text-slate-900 p-5 text-center">
-            {{ user.gender }}
-          </td>
-          <td class="font-ibm-plex-sans text-slate-900 p-5 text-center">
-            {{ user.status }}
-          </td>
-          <td class="p-5">
-            <NuxtLink :to="`/user/${user.id}/edit`" class="text-yellow-500">Edit</NuxtLink>
-            <button
-              data-modal-target="popup-modal"
-              data-modal-toggle="popup-modal"
-              type="button"
-              @click="openModal(true, user.id)"
-              class="pl-4 text-red-500">
-              Hapus
-            </button>
-          </td>
-        </tr>
-        <tr v-else>
-          <td colspan="5">
-            <!-- Loading -->
-            <Loading />
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        <!-- Body -->
+        <tbody>
+          <tr v-if="!users.loading" class="hover:bg-slate-50" v-for="user in users.data">
+            <td class="font-ibm-plex-sans text-slate-900 p-5 break-all">
+              {{ user.name }}
+            </td>
+            <td class="font-ibm-plex-sans text-slate-900 p-5 break-all">
+              {{ user.email }}
+            </td>
+            <td class="font-ibm-plex-sans text-slate-900 p-5 break-all text-center">
+              {{ app.$capitalizeFirstLetter(user.gender) }}
+            </td>
+            <td class="font-ibm-plex-sans text-slate-900 p-5 break-all text-center">
+              {{ app.$capitalizeFirstLetter(user.status) }}
+            </td>
+            <td>
+              <div class="flex flex-col lg:flex-row justify-center items-center lg:gap-4">
+                <NuxtLink :to="`/user/${user.id}/edit`" class="text-yellow-500">Edit</NuxtLink>
+                <button
+                  data-modal-target="popup-modal"
+                  data-modal-toggle="popup-modal"
+                  type="button"
+                  @click="openModal(true, user.id)"
+                  class="text-red-500">
+                  Hapus
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr v-else>
+            <td colspan="5">
+              <!-- Loading -->
+              <Loading />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <!-- Pagination -->
     <Pagination
+      v-show="users.totalPages > 1"
       :page="users.page"
       :total-pages="users.totalPages"
       :loading="users.loading"
@@ -134,6 +139,8 @@
 useHead({
   title: "List Users",
 })
+
+const app = useNuxtApp()
 
 const users = ref<any>({
   page: 1,

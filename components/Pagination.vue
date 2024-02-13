@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center py-8 border-t">
+  <div class="flex justify-center py-8 border-t text-sm">
     <nav class="relative z-0 inline-flex gap-4 rounded-md shadow-sm" aria-label="Pagination">
       <button
         type="button"
@@ -10,7 +10,6 @@
         <span class="sr-only">Previous</span>
         <IconPrevious />
       </button>
-
       <button
         type="button"
         @click="emit('to', 1)"
@@ -19,7 +18,7 @@
           '!bg-gray-100': loading,
         }"
         :disabled="loading"
-        class="bg-white text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 text-sm font-medium border">
+        class="hidden bg-white text-gray-500 hover:bg-gray-50 relative lg:inline-flex items-center px-4 py-2 text-sm font-medium border">
         1
       </button>
 
@@ -51,9 +50,20 @@
 
       <template v-else>
         <span
-          class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border">
+          class="relative hidden lg:inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border">
           ...
         </span>
+        <button
+          type="button"
+          @click="emit('to', 1)"
+          :class="{
+            'border-[#7d27ffe0] !bg-[#7d27ffe0] !text-white': page == 1,
+            '!bg-gray-100': loading,
+          }"
+          :disabled="loading"
+          class="bg-white text-gray-500 hover:bg-gray-50 relative inline-flex lg:hidden items-center px-4 py-2 text-sm font-medium border">
+          1
+        </button>
         <button
           type="button"
           @click="emit('to', page - 1)"
@@ -88,7 +98,7 @@
           {{ page + 1 }}
         </button>
         <span
-          class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border">
+          class="relative hidden lg:inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border">
           ...
         </span>
       </template>
@@ -101,7 +111,7 @@
           'border-[#7d27ffe0] !bg-[#7d27ffe0] !text-white': page == totalPages,
           '!bg-gray-100': loading,
         }"
-        class="bg-white text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 text-sm font-medium border">
+        class="hidden bg-white text-gray-500 hover:bg-gray-50 relative lg:inline-flex items-center px-4 py-2 text-sm font-medium border">
         {{ totalPages }}
       </button>
       <button

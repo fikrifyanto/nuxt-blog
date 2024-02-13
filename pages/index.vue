@@ -1,9 +1,7 @@
 <template>
   <header class="bg-[#7d27ffe0] text-center text-white py-20">
     <h1 class="text-4xl font-raleway font-extrabold">The Personal Blog</h1>
-    <p class="font-ibm-plex-sans mt-2">
-      Expand your SEO and marketing knowledge with<br />detailed tutorials and case studies.
-    </p>
+    <p class="font-ibm-plex-sans mt-2">Personal Blog for Challenge Test stage in synapsis.id</p>
   </header>
   <main class="max-w-4xl mx-auto py-14 md:py-20">
     <div class="grid grid-cols-1 md:grid-cols-2 px-6 lg:px-0 gap-14 md:gap-20">
@@ -27,11 +25,12 @@
 </template>
 
 <script setup lang="ts">
+const app = useNuxtApp()
 const { data: posts }: any = await useFetch("https://gorest.co.in/public/v2/posts")
 
 posts.value = await Promise.all(
   posts.value.map(async (post: any) => {
-    post.body = excerpt(post.body)
+    post.body = app.$excerpt(post.body)
     try {
       const { data: user } = await useFetch(`https://gorest.co.in/public/v2/users/${post.user_id}`)
       post.user = user.value
@@ -41,12 +40,6 @@ posts.value = await Promise.all(
     return post
   })
 )
-
-function excerpt(text: string): string | null | undefined {
-  const sentences = text.match(/[^.!?]+[.!?]+/g)
-  const threeSentences = sentences?.slice(0, 4)
-  return threeSentences?.join("")
-}
 
 useHead({
   title: "The Personal Blog",
