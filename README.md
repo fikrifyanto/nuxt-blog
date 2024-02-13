@@ -20,6 +20,14 @@ yarn install
 bun install
 ```
 
+## Set Environment Variables
+
+Copy .env.example as .env and set the API_TOKEN for <https://gorest.co.in>:
+
+```bash
+cp .env.example .env
+```
+
 ## Development Server
 
 Start the development server on `http://localhost:3000`:
