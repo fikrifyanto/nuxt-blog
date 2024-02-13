@@ -8,7 +8,7 @@
   </header>
   <main class="max-w-4xl mx-auto py-14 md:py-20">
     <div class="grid grid-cols-1 md:grid-cols-2 px-6 lg:px-0 gap-14 md:gap-20">
-      <template v-for="post in posts.data">
+      <template :key="post.id" v-for="post in posts.data">
         <article>
           <header>
             <h2 class="text-3xl font-raleway font-extrabold text-[#7d27ffe0] hover:text-[#FF8911]">
@@ -26,14 +26,17 @@
     </div>
 
     <!-- Pagination -->
-    <Pagination
-      v-show="posts.totalPages > 1"
-      :page="posts.page"
-      :total-pages="posts.totalPages"
-      :loading="posts.loading"
-      @next="posts.page++"
-      @previous="posts.page--"
-      @to="posts.page = $event" />
+    <ClientOnly>
+      <Pagination
+        class="mt-10"
+        v-show="posts.totalPages > 1"
+        :page="posts.page"
+        :total-pages="posts.totalPages"
+        :loading="posts.loading"
+        @next="posts.page++"
+        @previous="posts.page--"
+        @to="posts.page = $event" />
+    </ClientOnly>
   </main>
 </template>
 
@@ -52,24 +55,25 @@ const posts = ref<any>({
 async function fetchPosts() {
   posts.value.loading = true
 
-  const response = await $fetch.raw(`${config.public.API_URL}/public/v2/posts`, {
+  const { data } = await useFetch(`${config.public.API_URL}/public/v2/posts`, {
     params: {
       page: posts.value.page,
       per_page: posts.value.per_page,
     },
+    onResponse({ request, response, options }) {
+      const currentPage = response.headers.get("X-Pagination-Page")
+      if (currentPage) {
+        posts.value.page = parseInt(currentPage)
+      }
+
+      const totalPage = response.headers.get("X-Pagination-Pages")
+      if (totalPage) {
+        posts.value.totalPages = parseInt(totalPage)
+      }
+    },
   })
 
-  const currentPage = response.headers.get("X-Pagination-Page")
-  if (currentPage) {
-    posts.value.page = parseInt(currentPage)
-  }
-
-  const totalPage = response.headers.get("X-Pagination-Pages")
-  if (totalPage) {
-    posts.value.totalPages = parseInt(totalPage)
-  }
-
-  posts.value.data = response._data
+  posts.value.data = data.value
   posts.value.data = await Promise.all(
     posts.value.data.map(async (post: any) => {
       post.body = app.$excerpt(post.body)
@@ -89,6 +93,12 @@ async function fetchPosts() {
 }
 
 fetchPosts()
+
+onMounted(() => {
+  setTimeout(() => {
+    fetchPosts()
+  }, 100)
+})
 
 watch(
   () => posts.value.page,
