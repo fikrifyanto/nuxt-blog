@@ -100,6 +100,10 @@ onMounted(() => {
   }, 100)
 })
 
+onUpdated(() => {
+  window.scrollTo(0, 0)
+})
+
 watch(
   () => posts.value.page,
   () => {

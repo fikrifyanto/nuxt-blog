@@ -15,7 +15,7 @@
         @click="emit('to', 1)"
         :class="{
           'border-[#7d27ffe0] !bg-[#7d27ffe0] !text-white': page == 1,
-          '!bg-gray-100': loading,
+          '!bg-gray-100': loading && page != 1,
         }"
         :disabled="loading"
         class="hidden bg-white text-gray-500 hover:bg-gray-50 relative lg:inline-flex items-center px-4 py-2 text-sm font-medium border">
@@ -40,7 +40,7 @@
           @click="emit('to', totalPages - 1)"
           :class="{
             'border-[#7d27ffe0] !bg-[#7d27ffe0] !text-white': page == totalPages - 1,
-            '!bg-gray-100': loading,
+            '!bg-gray-100': loading && page !== totalPages - 1,
           }"
           :disabled="loading"
           class="bg-white text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 text-sm font-medium border">
@@ -58,7 +58,7 @@
           @click="emit('to', 1)"
           :class="{
             'border-[#7d27ffe0] !bg-[#7d27ffe0] !text-white': page == 1,
-            '!bg-gray-100': loading,
+            '!bg-gray-100': loading && page != 1,
           }"
           :disabled="loading"
           class="bg-white text-gray-500 hover:bg-gray-50 relative inline-flex lg:hidden items-center px-4 py-2 text-sm font-medium border">
@@ -70,7 +70,7 @@
           :disabled="loading"
           :class="{
             'border-[#7d27ffe0] !bg-[#7d27ffe0] !text-white': page == page - 1,
-            '!bg-gray-100': loading,
+            '!bg-gray-100': loading && page != page - 1,
           }"
           class="bg-white text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 text-sm font-medium border">
           {{ page - 1 }}
@@ -80,7 +80,7 @@
           @click="emit('to', page)"
           :class="{
             'border-[#7d27ffe0] !bg-[#7d27ffe0] !text-white': page == page,
-            '!bg-gray-100': loading,
+            '!bg-gray-100': loading && page != page,
           }"
           :disabled="loading"
           class="bg-white text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 text-sm font-medium border">
@@ -91,7 +91,7 @@
           @click="emit('to', page + 1)"
           :class="{
             'border-[#7d27ffe0] !bg-[#7d27ffe0] !text-white': page == page + 1,
-            '!bg-gray-100': loading,
+            '!bg-gray-100': loading && page != page + 1,
           }"
           :disabled="loading"
           class="bg-white text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 text-sm font-medium border">
@@ -109,7 +109,7 @@
         :disabled="loading"
         :class="{
           'border-[#7d27ffe0] !bg-[#7d27ffe0] !text-white': page == totalPages,
-          '!bg-gray-100': loading,
+          '!bg-gray-100': loading && page != totalPages,
         }"
         class="hidden bg-white text-gray-500 hover:bg-gray-50 relative lg:inline-flex items-center px-4 py-2 text-sm font-medium border">
         {{ totalPages }}
