@@ -36,6 +36,7 @@
           ...
         </span>
         <button
+          v-if="totalPages !== 0"
           type="button"
           @click="emit('to', totalPages - 1)"
           :class="{
@@ -104,6 +105,7 @@
       </template>
 
       <button
+        v-if="totalPages !== 0"
         type="button"
         @click="emit('to', totalPages)"
         :disabled="loading"
