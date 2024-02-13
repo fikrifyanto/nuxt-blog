@@ -26,4 +26,7 @@ export default defineNuxtConfig({
       API_TOKEN: process.env.API_TOKEN,
     },
   },
+  routeRules: {
+    "/": { prerender: true },
+  },
 })

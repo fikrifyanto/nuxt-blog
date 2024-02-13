@@ -8,7 +8,7 @@
   </header>
   <main class="max-w-4xl mx-auto py-14 md:py-20">
     <div class="grid grid-cols-1 md:grid-cols-2 px-6 lg:px-0 gap-14 md:gap-20">
-      <template v-for="post in posts">
+      <template v-for="post in posts.data">
         <article>
           <header>
             <h2 class="text-3xl font-raleway font-extrabold text-[#7d27ffe0] hover:text-[#FF8911]">
@@ -24,6 +24,16 @@
         </article>
       </template>
     </div>
+
+    <!-- Pagination -->
+    <Pagination
+      v-show="posts.totalPages > 1"
+      :page="posts.page"
+      :total-pages="posts.totalPages"
+      :loading="posts.loading"
+      @next="posts.page++"
+      @previous="posts.page--"
+      @to="posts.page = $event" />
   </main>
 </template>
 
@@ -31,21 +41,60 @@
 const config = useRuntimeConfig()
 const app = useNuxtApp()
 
-const { data: posts }: any = await useFetch(`${config.public.API_URL}/public/v2/posts`)
+const posts = ref<any>({
+  page: 1,
+  totalPages: 0,
+  data: 0,
+  loading: true,
+  per_page: 10,
+})
 
-posts.value = await Promise.all(
-  posts.value.map(async (post: any) => {
-    post.body = app.$excerpt(post.body)
-    try {
-      const { data: user } = await useFetch(
-        `${config.public.API_URL}/public/v2/users/${post.user_id}`
-      )
-      post.user = user.value
-    } catch (error) {
-      post.user = {}
-    }
-    return post
+async function fetchPosts() {
+  posts.value.loading = true
+
+  const response = await $fetch.raw(`${config.public.API_URL}/public/v2/posts`, {
+    params: {
+      page: posts.value.page,
+      per_page: posts.value.per_page,
+    },
   })
+
+  const currentPage = response.headers.get("X-Pagination-Page")
+  if (currentPage) {
+    posts.value.page = parseInt(currentPage)
+  }
+
+  const totalPage = response.headers.get("X-Pagination-Pages")
+  if (totalPage) {
+    posts.value.totalPages = parseInt(totalPage)
+  }
+
+  posts.value.data = response._data
+  posts.value.data = await Promise.all(
+    posts.value.data.map(async (post: any) => {
+      post.body = app.$excerpt(post.body)
+      try {
+        const { data: user } = await useFetch(
+          `${config.public.API_URL}/public/v2/users/${post.user_id}`
+        )
+        post.user = user.value
+      } catch (error) {
+        post.user = {}
+      }
+      return post
+    })
+  )
+
+  posts.value.loading = false
+}
+
+fetchPosts()
+
+watch(
+  () => posts.value.page,
+  () => {
+    fetchPosts()
+  }
 )
 
 useHead({
