@@ -29,7 +29,6 @@
     <ClientOnly>
       <Pagination
         class="mt-10"
-        v-show="posts.totalPages > 1"
         :page="posts.page"
         :total-pages="posts.totalPages"
         :loading="posts.loading"
