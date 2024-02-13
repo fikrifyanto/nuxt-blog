@@ -140,6 +140,7 @@ useHead({
   title: "List Users",
 })
 
+const config = useRuntimeConfig()
 const app = useNuxtApp()
 
 const users = ref<any>({
@@ -162,7 +163,7 @@ const isModalOpen = ref<boolean>(false)
 async function fetchUsers() {
   users.value.loading = true
 
-  const response = await $fetch.raw(`https://gorest.co.in/public/v2/users`, {
+  const response = await $fetch.raw(`${config.public.API_URL}/public/v2/users`, {
     params: {
       page: users.value.page,
       name: users.value.search.name,
@@ -195,7 +196,7 @@ function openModal(open: boolean = true, id: string | number | null = null) {
 async function deleteUser(userId: number) {
   await $fetch(`https://gorest.co.in/public/v2/users/${userId}`, {
     headers: {
-      Authorization: "Bearer 2c4b6fd4b874e0a0893fb93314cb10bd2b655cba76a738946da0be538e9905e6",
+      Authorization: "Bearer " + process.env.API_TOKEN,
     },
     method: "DELETE",
   })

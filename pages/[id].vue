@@ -30,19 +30,20 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig()
 const route = useRoute()
 
 const { data: post, error: postError }: any = await useFetch(
-  "https://gorest.co.in/public/v2/posts/" + route.params.id
+  `${config.public.API_URL}/public/v2/posts/${route.params.id}`
 )
 
 const { data: user, error: userError }: any = await useFetch(
-  `https://gorest.co.in/public/v2/users/${post.value.user_id}`
+  `${config.public.API_URL}/public/v2/users/${post.value.user_id}`
 )
 if (userError.value) user.value = user
 
 const { data: comments }: any = await useFetch(
-  `https://gorest.co.in/public/v2/posts/${post.value.id}/comments`
+  `${config.public.API_URL}/public/v2/posts/${post.value.id}/comments`
 )
 
 useHead({

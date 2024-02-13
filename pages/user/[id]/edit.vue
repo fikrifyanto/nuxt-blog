@@ -67,7 +67,7 @@ async function editUser(event: Event) {
 
   await $fetch("https://gorest.co.in/public/v2/users/" + route.params.id, {
     headers: {
-      Authorization: "Bearer 2c4b6fd4b874e0a0893fb93314cb10bd2b655cba76a738946da0be538e9905e6",
+      Authorization: "Bearer " + process.env.API_TOKEN,
     },
     method: "PUT",
     body: {
