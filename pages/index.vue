@@ -69,6 +69,9 @@ async function fetchPosts() {
       const totalPage = response.headers.get("X-Pagination-Pages")
       if (totalPage) {
         posts.value.totalPages = parseInt(totalPage)
+        if (!process.server) {
+          sessionStorage.setItem("totalPages", totalPage)
+        }
       }
     },
   })
@@ -98,6 +101,14 @@ onMounted(() => {
   setTimeout(() => {
     fetchPosts()
   }, 100)
+})
+
+onUpdated(() => {
+  const totalPage = sessionStorage.getItem("totalPages")
+  console.log(totalPage)
+  if (totalPage) {
+    posts.value.totalPage = totalPage
+  }
 })
 
 watch(
