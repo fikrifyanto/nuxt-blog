@@ -100,14 +100,13 @@ onMounted(() => {
   setTimeout(() => {
     fetchPosts()
   }, 100)
-})
 
-onUpdated(() => {
-  const totalPage = sessionStorage.getItem("totalPages")
-  console.log(totalPage)
-  if (totalPage) {
-    posts.value.totalPage = totalPage
-  }
+  setInterval(() => {
+    const totalPage = sessionStorage.getItem("totalPages")
+    if (totalPage && parseInt(totalPage) == 1) {
+      fetchPosts()
+    }
+  }, 1000)
 })
 
 watch(
